@@ -1,24 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
+import axios from 'axios'
+
 function App() {
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+
+
+  const handleChange = (e) => {
+    e.preventDefault()
+
+    if (e.target.id === 'name') {
+      setName(e.target.value)
+    } else {
+      setEmail(e.target.value)
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const dataToSubmit = {
+      name,
+      email
+    }
+    axios.post('/api/sendMail', dataToSubmit)
+  }
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <form onSubmit={handleSubmit}>
+        <input id='name' placeholder='name' value={name} onChange={handleChange} />
+        <input id='email' placeholder='email' value={email} onChange={handleChange} />
+
+        <button onClick={handleSubmit}>Send Email</button>
+
+      </form>
     </div>
   );
 }
